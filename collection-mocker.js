@@ -3,21 +3,36 @@
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
   };
 
-  this.CollectionAutofill = function(collection, schema, count) {
+  var capitalize = function(s) {
+    return s[0].toUpperCase() + s.slice(1);
+  };
+
+  this.CollectionMock = function(collection, schema, count) {
     var attrs = schema.objectKeys();
 
     for (var i = 0; i < count; i++) {
-      var row;
+      var row = {};
 
       _.each(attrs, function(attr) {
         var definition = schema.getDefinition(attr);
 
         if (definition.type === String) {
-          row[attr] = dimsum.sentence(1);
+          var max = definition.max || 500;
+          var to = _.random(0, max);
+          var text = capitalize(dimsum.sentence(1).substr(0, to));
+
+          row[attr] = text;
         } else if (definition.type === Date) {
-          row[attr] = randomDate(new Date(2011, 0, 1), new Date());
+          var from = new Date(2011, 0, 1);
+          var to = new Date();
+
+          row[attr] = randomDate(from, to);
         } else if (definition.type === Number) {
-          row[attr] = _.random(1, 100000);
+          var max = definition.max || 999999999;
+          var from = _.random(0, max);
+          var to = _.random(from, max);
+
+          row[attr] = _.random(from, to);
         }
       });
       collection.insert(row);
