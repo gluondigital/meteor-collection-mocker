@@ -3,10 +3,6 @@
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
   };
 
-  var capitalize = function(s) {
-    return s[0].toUpperCase() + s.slice(1);
-  };
-
   this.CollectionMock = function(collection, schema, count) {
     var attrs = schema.objectKeys();
 
@@ -19,7 +15,7 @@
         if (definition.type === String) {
           var max = definition.max || 500;
           var to = _.random(0, max);
-          var text = capitalize(dimsum.sentence(1).substr(0, to));
+          var text = dimsum.sentence(1).substr(0, to);
 
           row[attr] = text;
         } else if (definition.type === Date) {
